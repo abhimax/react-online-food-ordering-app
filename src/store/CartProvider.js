@@ -3,7 +3,7 @@ import CartContext from "./cart-context";
 
 const defaultCartState = {
   items: [],
-  totalAmount: 0,
+  totalAmount: 0
 };
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
