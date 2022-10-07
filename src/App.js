@@ -10,7 +10,6 @@ function App() {
   const [isCartVisible, setCartVisible] = useState(false);
 
   const cartOpenHandler = () => {
-    console.log('cartVisibleHandler');
     setCartVisible(true);
   }
   const cartCloseHandler = () => {
