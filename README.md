@@ -1,3 +1,17 @@
+# React Online Food Ordering App
+## Food Ordering App features.
++ View available items
++ Add product to the cart
++ Filter orders
++ view cart and edit cart
++ Display available items in dashboard.
+
+## Main menu
+![EXPENSETRACKER!](readme-res/food-ordering-app-screen-1.png)
+
+## Add new expenses
+![EXPENSETRACKER2!](readme-res/food-ordering-app-screen-2.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
