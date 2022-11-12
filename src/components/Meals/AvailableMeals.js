@@ -1,10 +1,28 @@
-import { DUMMY_MEALS } from "../../Data/Data";
+import { useEffect, useState } from "react";
 import Card from "../UI/Card";
 import classes from "./AvailableMeals.module.css";
 import MealItem from "./MealItem";
+const loadedMeals = [];
 
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((item) => {
+  const [meals, setMeals] = useState([]);
+  useEffect(()=>{
+    const  getMealsData = async () => {
+      const response = await fetch('https://movie-http-c62a0-default-rtdb.firebaseio.com/meals.json');
+      const mealData = await response.json();
+      for( const key in mealData){
+        loadedMeals.push({
+          id: key,
+          name: mealData[key].name,
+          description: mealData[key].description,
+          price: mealData[key].price,
+        });
+      }
+      setMeals(loadedMeals);
+    }
+    getMealsData();
+  });
+  const mealsList = meals.map((item) => {
     return (
       <MealItem
         key={item.id}
