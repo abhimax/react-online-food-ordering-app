@@ -1,7 +1,13 @@
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 import classes from './Checkout.module.css';
 
 const Checkout = (props) => {
+  const[formInputValidity, setFormInputValidity] = useState({
+      name: true,
+      street: true,
+      city: true,
+      postalCode: true
+  });
   const nameInputRef = useReducer();
   const streetInputRef = useReducer();
   const postalCodeInputRef = useReducer();
