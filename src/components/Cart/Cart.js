@@ -33,16 +33,33 @@ const Cart = ({ onCartClose }) => {
     </ul>
   );
 
-  const onOrderHandler= () => {
+  const onOrderHandler = () => {
     setIsCheckout(true);
-  }
+  };
 
-  const modalActions =       <div className={classes.actions}>
-  <button className={classes["button--alt"]} onClick={onCartClose}>
-    Close
-  </button>
-  {hasItems && <button className={classes.button} onClick={onOrderHandler}>Order</button>}
-</div>;
+  const submitOrderHandler = (userData) => {
+    console.log("SUBMIT HANDLER!", userData);
+    fetch("https://movie-http-c62a0-default-rtdb.firebaseio.com/orders.json", {
+      method: "POST",
+      body: JSON.stringify({ 
+        user: userData,
+        orderedItems: cartCtx.items
+      }),
+    });
+  };
+
+  const modalActions = (
+    <div className={classes.actions}>
+      <button className={classes["button--alt"]} onClick={onCartClose}>
+        Close
+      </button>
+      {hasItems && (
+        <button className={classes.button} onClick={onOrderHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <Modal onCartClose={onCartClose}>
@@ -51,9 +68,10 @@ const Cart = ({ onCartClose }) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      { isCheckout && <Checkout onCancel={onCartClose}/> }
-      { !isCheckout && modalActions }
-
+      {isCheckout && (
+        <Checkout onCancel={onCartClose} onConfirm={submitOrderHandler} />
+      )}
+      {!isCheckout && modalActions}
     </Modal>
   );
 };
