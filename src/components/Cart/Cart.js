@@ -4,17 +4,21 @@ import classes from "./Cart.module.css";
 import CartContext from "../../store/cart-context";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
+
 const Cart = ({ onCartClose }) => {
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   const hasItems = cartCtx.items.length > 0;
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDidSubmit, setIsDidSubmit] = useState(false);
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
   };
   const cartItemAddHandler = (item) => {
     cartCtx.addItem({ ...item, amount: 1 });
   };
+
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartCtx.items.map((item) => {
@@ -37,15 +41,18 @@ const Cart = ({ onCartClose }) => {
     setIsCheckout(true);
   };
 
-  const submitOrderHandler = (userData) => {
+  const submitOrderHandler = async (userData) => {
     console.log("SUBMIT HANDLER!", userData);
-    fetch("https://movie-http-c62a0-default-rtdb.firebaseio.com/orders.json", {
+    setIsSubmitting(true);
+    await fetch("https://movie-http-c62a0-default-rtdb.firebaseio.com/orders.json", {
       method: "POST",
       body: JSON.stringify({ 
         user: userData,
         orderedItems: cartCtx.items
       }),
     });
+    setIsSubmitting(false);
+    setIsDidSubmit(true);
   };
 
   const modalActions = (
@@ -61,9 +68,8 @@ const Cart = ({ onCartClose }) => {
     </div>
   );
 
-  return (
-    <Modal onCartClose={onCartClose}>
-      {cartItems}
+  const modalContent = <>
+  {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
         <span>{totalAmount}</span>
@@ -72,6 +78,15 @@ const Cart = ({ onCartClose }) => {
         <Checkout onCancel={onCartClose} onConfirm={submitOrderHandler} />
       )}
       {!isCheckout && modalActions}
+  </>;
+  const submittingContent = <p>Submitting data...</p>
+  const didSubmitContent = <p>Successfully Submitted.</p>
+
+  return (
+    <Modal onCartClose={onCartClose}>
+      { !isSubmitting && !isDidSubmit && modalContent}
+      { isSubmitting && submittingContent}
+      { isDidSubmit && !isSubmitting && didSubmitContent}
     </Modal>
   );
 };
