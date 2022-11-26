@@ -53,6 +53,7 @@ const Cart = ({ onCartClose }) => {
     });
     setIsSubmitting(false);
     setIsDidSubmit(true);
+    cartCtx.clearItems();
   };
 
   const modalActions = (
@@ -80,7 +81,13 @@ const Cart = ({ onCartClose }) => {
       {!isCheckout && modalActions}
   </>;
   const submittingContent = <p>Submitting data...</p>
-  const didSubmitContent = <p>Successfully Submitted.</p>
+  const didSubmitContent = <><p className={classes.success}>Successfully Submitted.</p>
+      <div className={classes.actions}>
+      <button className={classes["button--alt"]} onClick={onCartClose}>
+        Close
+      </button>
+    </div>
+  </>
 
   return (
     <Modal onCartClose={onCartClose}>
